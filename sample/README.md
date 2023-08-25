@@ -1,0 +1,1 @@
+### Sample Theia-ide supported Dockerfile
