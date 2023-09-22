@@ -94,19 +94,17 @@ RUN apt install -y wget curl gnupg2 software-properties-common apt-transport-htt
 RUN curl -fsSL https://www.mongodb.org/static/pgp/server-6.0.asc| gpg --dearmor -o /etc/apt/trusted.gpg.d/mongodb-6.gpg
 RUN echo "deb [ arch=amd64,arm64 ] https://repo.mongodb.org/apt/ubuntu $(lsb_release -cs)/mongodb-org/6.0 multiverse" | tee /etc/apt/sources.list.d/mongodb-org-6.0.list
 
-ENV TZ="Europe/Istanbul"
-RUN wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb
+
+RUN  wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb
 RUN  dpkg -i ./libssl1.1_1.1.1f-1ubuntu2.19_amd64.deb
-RUN  apt update -y
-RUN  apt install -y mongodb-org
+RUN export DEBIAN_FRONTEND=noninteractive \
+    && echo "Europe/Istanbul" > /etc/timezone \
+    && apt update -y \
+    && apt install -y mongodb-org 
 
-
-
-
-#
 ADD motd /root/workspace/motd
 
-# Running environment
+# Running environment 
 EXPOSE 3030
 WORKDIR /root/workspace
 USER root
